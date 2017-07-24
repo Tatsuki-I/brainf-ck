@@ -30,12 +30,11 @@ bfRun :: String -> IO BF
 bfRun cmds = mapM_ bfDo cmds `execStateT` bfInit
 
 bfDo :: Char -> StateT BF IO ()
-bfDo cmd = do
-    bf <- get
+bfDo cmd = do 
     case cmd of
         '+' -> modify bfInc
         '-' -> modify bfDec
-        '.' -> do{newBF <- lift $ bfPrint bf; put newBF}
+        '.' -> get >>= (lift . bfPrint) >>= put
 
 
 bfInc :: BF -> BF
