@@ -26,17 +26,17 @@ bfInit = BF
         { register = [0, 0 ..]
         , pointer = 0 }
 
-bfRun :: String -> BF
+bfRun :: String -> IO BF
 bfRun cmd = bfRun' cmd bfInit
     where
-        bfRun' :: String -> BF -> BF
-        bfRun' [] bf = bf
-        bfRun' (cmd : xs) bf = bfRun' xs (bfDo bf cmd)
+        bfRun' :: String -> BF -> IO BF
+        bfRun' [] bf = return $ bf
+        bfRun' (cmd : xs) bf = do {newBF <- bfDo bf cmd; bfRun' xs newBF}
 
-bfDo :: BF -> Char -> BF
+bfDo :: BF -> Char -> IO BF
 bfDo bf cmd = case cmd of
-        '+' -> bfInc bf
-        '-' -> bfDec bf
+        '+' -> return $ bfInc bf
+        '-' -> return $ bfDec bf
         '.' -> bfPrint bf
 
 
@@ -49,8 +49,10 @@ bfDec bf = bf { register = localMap (subtract 1) (pointer bf) (register bf) }
 chrToStr :: Char -> String
 chrToStr chr = [chr]
 
-bfPrint :: BF -> IO ()
-bfPrint bf = putStr . chrToStr . chr $ (register bf) !! (pointer bf)
+bfPrint :: BF -> IO BF
+bfPrint bf = do
+ putStr . chrToStr . chr $ (register bf) !! (pointer bf)
+ return bf
 
 localMap :: Num a => (a -> a) -> Int -> [a] -> [a]
 localMap f pos list = (take pos list) ++ f (list !! pos) : drop (pos + 1) list
