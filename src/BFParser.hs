@@ -31,10 +31,10 @@ bfRun cmd = bfRun' cmd bfInit
     where
         bfRun' :: String -> BF -> IO BF
         bfRun' [] bf = return $ bf
-        bfRun' (cmd : xs) bf = do {newBF <- bfDo bf cmd; bfRun' xs newBF}
+        bfRun' (cmd : xs) bf = do {newBF <- bfDo cmd bf; bfRun' xs newBF}
 
-bfDo :: BF -> Char -> IO BF
-bfDo bf cmd = case cmd of
+bfDo :: Char -> BF -> IO BF
+bfDo cmd bf = case cmd of
         '+' -> return $ bfInc bf
         '-' -> return $ bfDec bf
         '.' -> bfPrint bf
