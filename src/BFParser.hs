@@ -27,17 +27,14 @@ bfInit = BF
         , pointer = 0 }
 
 bfRun :: String -> IO BF
-bfRun cmd = bfRun' cmd `execStateT` bfInit
-    where
-        bfRun' :: String -> StateT BF IO ()
-        bfRun' = mapM_ bfDo 
+bfRun cmds = mapM_ bfDo cmds `execStateT` bfInit
 
 bfDo :: Char -> StateT BF IO ()
 bfDo cmd = do
     bf <- get
     case cmd of
-        '+' -> put $ bfInc bf
-        '-' -> put $ bfDec bf
+        '+' -> modify bfInc
+        '-' -> modify bfDec
         '.' -> do{newBF <- lift $ bfPrint bf; put newBF}
 
 
