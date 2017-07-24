@@ -31,16 +31,21 @@ bfRun cmds = mapM_ bfDo cmds `execStateT` bfInit
 
 bfDo :: Char -> StateT BF IO ()
 bfDo cmd = case cmd of
-        '+' -> modify bfInc
-        '-' -> modify bfDec
+        '+' -> modify $ bfReg (+ 1)
+        '-' -> modify $ bfReg (subtract 1) 
+        '>' -> modify $ bfShift (+ 1)
+        '<' -> modify $ bfShift (subtract 1)
         '.' -> get >>= (lift . bfPrint) >>= put
+        ',' -> undefined
+        '[' -> undefined
+        ']' -> undefined
+        _   -> undefined
 
+bfReg :: (Int -> Int) -> BF -> BF
+bfReg f bf = bf { register = localMap f (pointer bf) (register bf) }
 
-bfInc :: BF -> BF
-bfInc bf = bf { register = localMap (+1) (pointer bf) (register bf) }
-
-bfDec :: BF -> BF
-bfDec bf = bf { register = localMap (subtract 1) (pointer bf) (register bf) }
+bfShift :: (Int -> Int) -> BF -> BF
+bfShift f bf = bf { pointer = f $ pointer bf}
 
 chrToStr :: Char -> String
 chrToStr = (:[])
