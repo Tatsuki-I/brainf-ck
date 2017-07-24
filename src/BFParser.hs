@@ -34,10 +34,12 @@ bfRun cmd = bfRun' cmd bfInit
         bfRun' (cmd : xs) bf = do {((),newBF) <- bfDo cmd `runStateT` bf; bfRun' xs newBF}
 
 bfDo :: Char -> StateT BF IO ()
-bfDo cmd = StateT $ \bf -> case cmd of
-        '+' -> return ((),bfInc bf)
-        '-' -> return ((),bfDec bf)
-        '.' -> do {newBF <- bfPrint bf; return ((),newBF)}
+bfDo cmd = do
+    bf <- get
+    case cmd of
+        '+' -> put $ bfInc bf
+        '-' -> put $ bfDec bf
+        '.' -> do{newBF <- lift $ bfPrint bf; put newBF}
 
 
 bfInc :: BF -> BF
