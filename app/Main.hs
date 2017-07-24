@@ -5,5 +5,5 @@ import BFParser
 
 main = do
         args <- getArgs
-        bfRun $ args !! 0
+        bfRun $ head args
         putStrLn ""
