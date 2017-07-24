@@ -5,5 +5,5 @@ import BFParser
 
 main = do
         args <- getArgs
-        x <- bfRun $ args !! 0
+        x <- bfRun $ head args
         print $ take 5 (register x)

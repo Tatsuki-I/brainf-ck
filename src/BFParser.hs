@@ -30,8 +30,7 @@ bfRun :: String -> IO BF
 bfRun cmds = mapM_ bfDo cmds `execStateT` bfInit
 
 bfDo :: Char -> StateT BF IO ()
-bfDo cmd = do 
-    case cmd of
+bfDo cmd = case cmd of
         '+' -> modify bfInc
         '-' -> modify bfDec
         '.' -> get >>= (lift . bfPrint) >>= put
@@ -48,8 +47,8 @@ chrToStr = (:[])
 
 bfPrint :: BF -> IO BF
 bfPrint bf = do
- putStr . chrToStr . chr $ (register bf) !! (pointer bf)
+ putStr . chrToStr . chr $ register bf !! pointer bf
  return bf
 
 localMap :: Num a => (a -> a) -> Int -> [a] -> [a]
-localMap f pos list = (take pos list) ++ f (list !! pos) : drop (pos + 1) list
+localMap f pos list = take pos list ++ f (list !! pos) : drop (pos + 1) list
