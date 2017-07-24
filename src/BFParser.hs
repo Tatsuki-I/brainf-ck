@@ -34,12 +34,10 @@ bfRun cmd = bfRun' cmd bfInit
         bfRun' (cmd : xs) bf = bfRun' xs (bfDo bf cmd)
 
 bfDo :: BF -> Char -> BF
-bfDo bf cmd = result <- case cmd of
-        '+' -> return bfInc bf
-        '-' -> return bfDec bf
-        '.' -> do
-                bfPrint bf
-                return bf
+bfDo bf cmd = case cmd of
+        '+' -> bfInc bf
+        '-' -> bfDec bf
+        '.' -> bfPrint bf
 
 
 bfInc :: BF -> BF
