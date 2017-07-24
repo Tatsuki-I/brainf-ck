@@ -30,10 +30,7 @@ bfRun :: String -> IO BF
 bfRun cmd = bfRun' cmd `execStateT` bfInit
     where
         bfRun' :: String -> StateT BF IO ()
-        bfRun' []  = return ()
-        bfRun' (cmd : xs) = do
-            bfDo cmd
-            bfRun' xs
+        bfRun' = mapM_ bfDo 
 
 bfDo :: Char -> StateT BF IO ()
 bfDo cmd = do
