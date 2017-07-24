@@ -27,7 +27,7 @@ bfInit = BF
         , pointer = 0 }
 
 bfRun :: String -> IO BF
-bfRun cmd = snd <$> (bfRun' cmd `runStateT` bfInit)
+bfRun cmd = bfRun' cmd `execStateT` bfInit
     where
         bfRun' :: String -> StateT BF IO ()
         bfRun' []  = return ()
@@ -51,7 +51,7 @@ bfDec :: BF -> BF
 bfDec bf = bf { register = localMap (subtract 1) (pointer bf) (register bf) }
 
 chrToStr :: Char -> String
-chrToStr chr = [chr]
+chrToStr = (:[])
 
 bfPrint :: BF -> IO BF
 bfPrint bf = do
