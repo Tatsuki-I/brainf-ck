@@ -5,5 +5,6 @@ import BFParser
 
 main = do
         args <- getArgs
-        bfRun $ head args
+        text <- readFile $ head args
+        bfRun $ filter (/= '\n') text
         putStrLn ""
