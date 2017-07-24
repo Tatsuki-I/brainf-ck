@@ -27,10 +27,10 @@ bfInit = BF
         , pointer = 0 }
 
 bfRun :: String -> IO BF
-bfRun cmd = bfRun' cmd bfInit
+bfRun cmd = snd <$> bfRun' cmd bfInit
     where
-        bfRun' :: String -> BF -> IO BF
-        bfRun' [] bf = return $ bf
+        bfRun' :: String -> BF -> IO ((),BF)
+        bfRun' [] bf = return ((),bf)
         bfRun' (cmd : xs) bf = do {((),newBF) <- bfDo cmd `runStateT` bf; bfRun' xs newBF}
 
 bfDo :: Char -> StateT BF IO ()
