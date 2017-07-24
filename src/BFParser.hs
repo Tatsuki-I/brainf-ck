@@ -35,15 +35,21 @@ bfRun cmd = bfRun' cmd bfInit
 
 bfDo :: BF -> Char -> IO BF
 bfDo bf cmd = case cmd of
-        '+' -> return $ bfReg (+1) bf
+        '+' -> return $ bfReg (+ 1) bf
         '-' -> return $ bfReg (subtract 1) bf
+        '>' -> return $ bfShift (+ 1) bf
+        '<' -> return $ bfShift (subtract 1) bf
         '.' -> bfPrint bf
+        ',' -> undefined
+        '[' -> undefined
+        ']' -> undefined
+        _   -> undefined
 
 bfReg :: (Int -> Int) -> BF -> BF
 bfReg f bf = bf { register = localMap f (pointer bf) (register bf) }
 
-
-
+bfShift :: (Int -> Int) -> BF -> BF
+bfShift f bf = bf { pointer = f $ pointer bf}
 
 chrToStr :: Char -> String
 chrToStr chr = [chr]
