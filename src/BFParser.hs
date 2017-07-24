@@ -48,7 +48,7 @@ bfShift :: (Int -> Int) -> BF -> BF
 bfShift f bf = bf { pointer = f $ pointer bf}
 
 chrToStr :: Char -> String
-chrToStr = (:[])
+chrToStr = (: [])
 
 bfPrint :: BF -> IO BF
 bfPrint bf = do
