@@ -1,7 +1,7 @@
 module BFParser where
 
 import Text.ParserCombinators.Parsec hiding (spaces)
---import Control.Monad.State
+import Control.Monad.State
 import Data.Char
 
 data BF = BF
@@ -31,10 +31,10 @@ bfRun cmd = bfRun' cmd bfInit
     where
         bfRun' :: String -> BF -> IO BF
         bfRun' [] bf = return $ bf
-        bfRun' (cmd : xs) bf = do {((),newBF) <- bfDo cmd bf; bfRun' xs newBF}
+        bfRun' (cmd : xs) bf = do {((),newBF) <- bfDo cmd `runStateT` bf; bfRun' xs newBF}
 
-bfDo :: Char -> BF -> IO ((),BF)
-bfDo cmd = \bf -> case cmd of
+bfDo :: Char -> StateT BF IO ()
+bfDo cmd = StateT $ \bf -> case cmd of
         '+' -> return ((),bfInc bf)
         '-' -> return ((),bfDec bf)
         '.' -> do {newBF <- bfPrint bf; return ((),newBF)}
