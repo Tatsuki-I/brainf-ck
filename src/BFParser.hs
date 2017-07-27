@@ -1,4 +1,4 @@
-module BFParser (bfRun) where
+module BFParser (bfRun, compile) where
 
 import Text.ParserCombinators.Parsec hiding (spaces)
 import Control.Monad.State
@@ -53,3 +53,6 @@ bfPrint bf =  do putStr . chrToStr . chr $ register bf !! pointer bf
 
 localMap        :: Num a => (a -> a) -> Int -> [a] -> [a]
 localMap f p xs =  take p xs ++ f (xs !! p) : drop (p + 1) xs
+
+compile :: FilePath -> String -> IO ()
+compile path str = writeFile (path ++ ".tmp.brainf-ckobj.hs") ("import BFParser\nmain = do { bfRun \"" ++ str ++ "\"; putStrLn \"\";}")
