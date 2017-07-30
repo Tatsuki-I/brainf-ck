@@ -32,7 +32,7 @@ bfDo cmd =  case cmd of
               '-' -> modify $ bfReg (subtract 1) 
               '>' -> modify $ bfShift (+ 1)
               '<' -> modify $ bfShift (subtract 1)
-              '.' -> get >>= (lift . bfPrint) >>= put
+              '.' -> get >>= (lift . bfPrint)
               ',' -> undefined
               '[' -> undefined
               ']' -> undefined
@@ -47,9 +47,9 @@ bfShift f bf =  bf { pointer = f $ pointer bf}
 chrToStr :: Char -> String
 chrToStr =  (:[])
 
-bfPrint    :: BF -> IO BF
-bfPrint bf =  do putStr . chrToStr . chr $ register bf !! pointer bf
-                 return bf
+bfPrint    :: BF -> IO ()
+bfPrint bf = putChar . chr $ register bf !! pointer bf
+                 
 
 localMap        :: Num a => (a -> a) -> Int -> [a] -> [a]
 localMap f p xs =  take p xs ++ f (xs !! p) : drop (p + 1) xs
