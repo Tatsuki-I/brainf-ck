@@ -5,7 +5,7 @@ import Control.Monad.State
 import Data.Char
 
 data BF = BF { register :: [Int]
-             , pointer  ::  Int
+             , pointer  :: Int
              } deriving (Show)
 
 symbol :: Parser Char
@@ -21,7 +21,7 @@ spaces =  skipMany1 space
 
 bfInit :: BF
 bfInit =  BF { register = [0, 0 ..]
-             , pointer = 0 }
+             , pointer  = 0 }
 
 bfRun      :: String -> IO BF
 bfRun cmds =  mapM_ bfDo cmds `execStateT` bfInit
